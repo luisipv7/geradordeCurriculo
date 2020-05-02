@@ -11,6 +11,7 @@
     />
     <q-card
       flat
+      class="q-pr-lg"
       :bordered=false
       v-if="btnGerar"
     >
@@ -190,19 +191,19 @@
                   </template>
                 </q-select>
                 <input
-                v-if="Form.FormacaoAcademica"
-                v-model="Form.nomeDaEscola"
-                :readonly="btnlerEscrever"
-                placeholder="Nome da Escola"
-                dense
-                rounded
-                outlined
-                class="text-h6  q-mt-sm q-mb-xs"
-              />
+                  v-if="Form.FormacaoAcademica"
+                  v-model="Form.nomeDaEscola"
+                  :readonly="btnlerEscrever"
+                  placeholder="Nome da Escola"
+                  dense
+                  rounded
+                  outlined
+                  class="text-h6  q-mt-sm q-mb-xs"
+                />
               </q-card-section>
             </q-card-section>
           </q-card-section>
-           <q-stepper-navigation>
+          <q-stepper-navigation>
             <q-btn
               @click="step = 3"
               color="primary"
@@ -212,9 +213,115 @@
         </q-step>
         <q-step
           :name="3"
-          title="Cursos Extracurriculares"
+          title="Experiência Profissional"
           icon="edit"
           :done="step > 3"
+        >
+          <q-card-section>
+            <q-separator />
+            <q-card-section>
+              <q-card-section class="q-gutter-xs q-pr-lg">
+                <input
+                  v-model="Experiencia.nomeDaEmpresa"
+                  :readonly="btnlerEscrever"
+                  placeholder="Nome da Empresa"
+                  dense
+                  rounded
+                  outlined
+                  class="text-h6  q-mt-sm q-mb-xs"
+                />
+                <input
+                  v-model="Experiencia.cargo"
+                  :readonly="btnlerEscrever"
+                  placeholder="Cargo"
+                  dense
+                  rounded
+                  outlined
+                  class="text-h6  q-mt-sm q-mb-xs"
+                />
+                <q-datetime-picker
+                  label="Data de Inicio"
+                  v-model="Experiencia.dateIni"
+                  outlined
+                ></q-datetime-picker>
+                <q-datetime-picker
+                  label="Data de Saída"
+                  v-model="Experiencia.dateFim"
+                  outlined
+                ></q-datetime-picker>
+                <q-btn
+                  color="primary"
+                  @click="addCampo(Experiencia, null)"
+                >
+                  <q-icon
+                    left
+                    round
+                    size="3em"
+                    name="add"
+                  />
+                  <div>Adicionar Novo</div>
+                </q-btn>
+                <q-list
+                  bordered
+                  separator
+                  v-if="Form.Experiencia.length > 0"
+                >
+                  <q-item
+                    v-for="(info, index) in Form.Experiencia"
+                    :key="index"
+                  >
+                    <q-item-section top>
+                      <q-item-label lines="1">
+                        <span class="text-weight-medium">Nome da Empresa:</span>
+                        <span class="text-grey-8"> - {{ info.nomeDaEmpresa}}</span>
+                      </q-item-label>
+                      <q-item-label
+                        caption
+                        lines="1"
+                      >
+                        Cargo: {{ info.cargo}}
+                      </q-item-label>
+                      <q-item-label
+                        caption
+                        lines="1"
+                      >
+                        <span>Tempo de Empresa: {{ info.tempo }} </span>
+                      </q-item-label>
+                    </q-item-section>
+
+                    <q-item-section
+                      top
+                      side
+                    >
+                      <div class="text-grey-8 q-gutter-xs">
+                        <q-btn
+                          size="12px"
+                          flat
+                          dense
+                          round
+                          icon="delete"
+                          @click="retirarCampo(info)"
+                        />
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-card-section>
+            </q-card-section>
+          </q-card-section>
+          <q-stepper-navigation>
+            <q-btn
+              @click="step = 4"
+              color="primary"
+              label="Continue"
+            />
+          </q-stepper-navigation>
+        </q-step>
+        <q-step
+          :name="4"
+          title="Cursos Extracurriculares"
+          icon="edit"
+          :done="step > 4"
         >
           <q-card-section>
             <q-separator />
@@ -224,7 +331,7 @@
                   dense
                   rounded
                   outlined
-                  v-model="Form.FormacaoExtra"
+                  v-model="Cursos.FormacaoExtra"
                   :options="optionsExtra"
                   label="Escolha a opção"
                   emit-value
@@ -243,25 +350,76 @@
                   </template>
                 </q-select>
                 <input
-                v-if="Form.FormacaoExtra"
-                v-model="Form.nomeDaEscola"
-                :readonly="btnlerEscrever"
-                placeholder="Nome da Escola"
-                dense
-                rounded
-                outlined
-                class="text-h6  q-mt-sm q-mb-xs"
-              />
+                  v-if="Cursos.FormacaoExtra"
+                  v-model="Cursos.nomeDaEscolaTecnica"
+                  :readonly="btnlerEscrever"
+                  placeholder="Nome da Escola"
+                  dense
+                  rounded
+                  outlined
+                  class="text-h6  q-mt-sm q-mb-xs"
+                />
                 <input
-                v-if="Form.nomeDaEscola.length > 7"
-                v-model="Form.nomeDoCurso"
-                :readonly="btnlerEscrever"
-                placeholder="Informe o nome do Curso"
-                dense
-                rounded
-                outlined
-                class="text-h6  q-mt-sm q-mb-xs"
-              />
+                  v-if="Cursos.nomeDaEscolaTecnica.length > 7"
+                  v-model="Cursos.nomeDoCurso"
+                  :readonly="btnlerEscrever"
+                  placeholder="Informe o nome do Curso"
+                  dense
+                  rounded
+                  outlined
+                  class="text-h6  q-mt-sm q-mb-xs"
+                />
+                <q-btn
+                  color="primary"
+                  @click="addCampo(null, Cursos)"
+                >
+                  <q-icon
+                    left
+                    round
+                    size="3em"
+                    name="add"
+                  />
+                  <div>Adicionar Novo</div>
+                </q-btn>
+                <q-list
+                  bordered
+                  separator
+                  v-if="Form.Experiencia.length > 0"
+                >
+                  <q-item
+                    v-for="(info, index) in Form.Cursos"
+                    :key="index"
+                  >
+                    <q-item-section top>
+                      <q-item-label lines="1">
+                        <span class="text-weight-medium">Nome da Escola:</span>
+                        <span class="text-grey-8"> - {{ info.nomeDaEscolaTecnica}}</span>
+                      </q-item-label>
+                      <q-item-label
+                        caption
+                        lines="1"
+                      >
+                        Grau do Curso: {{ info.FormacaoExtra}}
+                      </q-item-label>
+                    </q-item-section>
+
+                    <q-item-section
+                      top
+                      side
+                    >
+                      <div class="text-grey-8 q-gutter-xs">
+                        <q-btn
+                          size="12px"
+                          flat
+                          dense
+                          round
+                          icon="delete"
+                          @click="retirarCampo(info)"
+                        />
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
               </q-card-section>
             </q-card-section>
           </q-card-section>
@@ -274,7 +432,7 @@
           />
           <q-btn
             flat
-            @click="step = 2"
+            @click="step = step - 1"
             color="primary"
             label="Voltar"
             class="q-ml-sm"
@@ -286,6 +444,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 export default {
   name: 'PageIndex',
   data () {
@@ -343,6 +502,17 @@ export default {
           description: 'Avançado'
         }
       ],
+      Experiencia: {
+        nomeDaEmpresa: '',
+        cargo: '',
+        dateIni: null,
+        dateFim: null,
+        tempo: ''
+      },
+      Cursos: {
+        nomeDaEscolaTecnica: '',
+        FormacaoExtra: ''
+      },
       btnGerar: false,
       reset: '',
       step: 1,
@@ -357,7 +527,9 @@ export default {
         email: '',
         age: '',
         FormacaoAcademica: '',
-        nomeDaEscola: ''
+        nomeDaEscola: '',
+        Experiencia: [],
+        Cursos: []
       }
     }
   },
@@ -370,7 +542,45 @@ export default {
       this.Form = {}
     },
     criarPDF () {
-      alert('Criar PDF')
+      alert(JSON.stringify(this.Form.Experiencia))
+    },
+    addCampo (Exp, Curso) {
+      if (Exp && Exp !== this.Experiencia) {
+        console.log(Exp)
+        const dataFim = dayjs(Exp.dateFim.substring(0, 10))
+        const tempoYEAR = dataFim.diff(Exp.dateIni.substring(0, 10), 'year')
+        const tempoMONTH = dataFim.diff(Exp.dateIni.substring(0, 10), 'month')
+
+        if (tempoYEAR > 0) {
+          Exp.tempo = `${tempoYEAR} Ano(s)`
+        } else {
+          Exp.tempo = tempoMONTH > 1 ? `${tempoMONTH} Meses` : `${tempoMONTH} Mês`
+        }
+        this.Form.Experiencia.push(Exp)
+        this.Experiencia = {
+          nomeDaEmpresa: '',
+          cargo: '',
+          dateIni: null,
+          dateFim: null,
+          tempo: ''
+        }
+      } else {
+        if (Curso !== this.Cursos) {
+          this.Form.Cursos.push(Curso)
+          this.Cursos = {
+            nomeDaEscolaTecnica: '',
+            FormacaoExtra: ''
+          }
+        }
+      }
+      return this.$q.notify({
+        message: 'OPS!!!',
+        caption: 'Falta Informações',
+        color: 'negative'
+      })
+    },
+    retirarCampo (info) {
+      console.log(info)
     }
   }
 }
