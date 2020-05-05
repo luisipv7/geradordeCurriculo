@@ -29,7 +29,7 @@
               :quality="1"
               initial-size="contain"
               :initial-image="Form.b64Foto"
-              ref="b64Brasao"
+              ref="b64Foto"
             ></croppa>
           </q-item-section>
         </q-item>
@@ -37,7 +37,6 @@
           <q-btn
             v-if="btnGerar"
             color="black"
-            dense
             rounded
             outlined
             label="Gerar outro Currículo"
@@ -70,89 +69,97 @@
           <q-card-section>
             <q-separator />
             <q-card-section class="q-gutter-xs">
-              <input
-                v-model="Form.name"
+              <q-input
+                v-model="FormOne.name"
                 :readonly="btnlerEscrever"
                 placeholder="Nome"
-                dense
+                fit
+                :error="$v.FormOne.name.$error "
                 rounded
                 outlined
-                class="text-h6 q-mt-sm q-mb-xs"
               />
-              <input
-                v-model="Form.dtNasc"
+              <q-datetime-picker
+                label="Data Nascimento"
+                v-model="FormOne.dtNasc"
                 :readonly="btnlerEscrever"
-                placeholder="Data Nascimento"
+                :error="$v.FormOne.dtNasc.$error "
                 dense
                 rounded
                 outlined
-                class="text-h6 q-mt-sm q-mb-xs"
-              />
+              ></q-datetime-picker>
+              <!-- class="q-pr-lg" -->
             </q-card-section>
             <q-card-section class="q-gutter-xs">
-              <input
-                v-model="Form.tel"
+              <q-input
+                v-model="FormOne.tel"
                 :readonly="btnlerEscrever"
                 placeholder="Telefone"
-                dense
+                :error="$v.FormOne.tel.$error "
+                fit
+                type="tel"
+                mask="(##) - ###.###.###"
+                unmasked-value
                 rounded
                 outlined
-                class="text-h6 q-mt-sm q-mb-xs"
               />
-              <input
-                v-model="Form.endereco"
+              <q-input
+                v-model="FormOne.endereco"
                 :readonly="btnlerEscrever"
                 placeholder="Endereço"
-                dense
+                fit
                 rounded
                 outlined
-                class="text-h6 q-mt-sm q-mb-xs"
+                :error="$v.FormOne.endereco.$error "
               />
             </q-card-section>
             <q-card-section class="q-gutter-xs">
-              <input
-                v-model="Form.RG"
+              <q-input
+                v-model="FormOne.RG"
                 :readonly="btnlerEscrever"
-                placeholder="RG"
-                dense
+                label="RG"
+                fit
+                :error="$v.FormOne.RG.$error "
                 rounded
+                type="tel"
                 outlined
-                class="text-h6 q-mt-sm q-mb-xs"
               />
-              <input
-                v-model="Form.CPF"
+              <q-input
+                v-model="FormOne.CPF"
+                label="CPF's"
                 :readonly="btnlerEscrever"
-                placeholder="CPF"
-                dense
+                :error="$v.FormOne.CPF.$error "
+                fit
+                mask="###.###.###-##"
+                unmasked-value
                 rounded
                 outlined
-                class="text-h6 q-mt-sm q-mb-xs"
               />
             </q-card-section>
             <q-card-section class="q-gutter-xs">
-              <input
-                v-model="Form.email"
+              <q-input
+                v-model="FormOne.email"
                 :readonly="btnlerEscrever"
                 placeholder="Email"
-                dense
+                :error="$v.FormOne.email.$error "
+                fit
                 rounded
                 outlined
-                class="text-h6 q-mt-sm q-mb-xs"
               />
-              <input
-                v-model="Form.age"
+              <q-input
+                v-model="FormOne.age"
                 :readonly="btnlerEscrever"
                 placeholder="Idade"
-                dense
+                :error="$v.FormOne.age.$error "
+                fit
+                mask="XXX.XXX.XXX-XX"
                 rounded
                 outlined
-                class="text-h6 q-mt-sm q-mb-xs"
               />
             </q-card-section>
           </q-card-section>
           <q-stepper-navigation>
             <q-btn
-              @click="step = 2"
+              @click="nextStep(step)"
               color="primary"
               label="Continue"
             />
@@ -169,14 +176,13 @@
             <q-card-section>
               <q-card-section class="q-gutter-xs q-pr-lg">
                 <q-select
-                  dense
+                  fit
                   rounded
                   outlined
-                  v-model="Form.FormacaoAcademica"
+                  v-model="FormTwo.FormacaoAcademica"
                   :options="optionsAcad"
                   label="Escolha a opção"
                   emit-value
-                  class="q-mt-sm q-mb-xs"
                 >
                   <template v-slot:option="scope">
                     <q-item
@@ -190,22 +196,22 @@
                     </q-item>
                   </template>
                 </q-select>
-                <input
-                  v-if="Form.FormacaoAcademica"
-                  v-model="Form.nomeDaEscola"
+                <q-input
+                  v-if="FormTwo.FormacaoAcademica"
+                  v-model="FormTwo.nomeDaEscola"
                   :readonly="btnlerEscrever"
                   placeholder="Nome da Escola"
-                  dense
+                  fit
                   rounded
                   outlined
-                  class="text-h6  q-mt-sm q-mb-xs"
+                  class=" q-mt-sm q-mb-xs"
                 />
               </q-card-section>
             </q-card-section>
           </q-card-section>
           <q-stepper-navigation>
             <q-btn
-              @click="step = 3"
+              @click="nextStep(step)"
               color="primary"
               label="Continue"
             />
@@ -221,23 +227,23 @@
             <q-separator />
             <q-card-section>
               <q-card-section class="q-gutter-xs q-pr-lg">
-                <input
+                <q-input
                   v-model="Experiencia.nomeDaEmpresa"
                   :readonly="btnlerEscrever"
                   placeholder="Nome da Empresa"
-                  dense
+                  fit
                   rounded
                   outlined
-                  class="text-h6  q-mt-sm q-mb-xs"
+                  class=" q-mt-sm q-mb-xs"
                 />
-                <input
+                <q-input
                   v-model="Experiencia.cargo"
                   :readonly="btnlerEscrever"
                   placeholder="Cargo"
-                  dense
+                  fit
                   rounded
                   outlined
-                  class="text-h6  q-mt-sm q-mb-xs"
+                  class=" q-mt-sm q-mb-xs"
                 />
                 <q-datetime-picker
                   label="Data de Inicio"
@@ -251,7 +257,7 @@
                 ></q-datetime-picker>
                 <q-btn
                   color="primary"
-                  @click="addCampo(Experiencia, null)"
+                  @click="addCampoExperiencia"
                 >
                   <q-icon
                     left
@@ -264,10 +270,10 @@
                 <q-list
                   bordered
                   separator
-                  v-if="Form.Experiencia.length > 0"
+                  v-if="FormTwo.Experiencia.length > 0"
                 >
                   <q-item
-                    v-for="(info, index) in Form.Experiencia"
+                    v-for="(info, index) in FormTwo.Experiencia"
                     :key="index"
                   >
                     <q-item-section top>
@@ -297,10 +303,10 @@
                         <q-btn
                           size="12px"
                           flat
-                          dense
+                          fit
                           round
                           icon="delete"
-                          @click="retirarCampo(info)"
+                          @click="retirarCampoExperiencia(info)"
                         />
                       </div>
                     </q-item-section>
@@ -311,7 +317,7 @@
           </q-card-section>
           <q-stepper-navigation>
             <q-btn
-              @click="step = 4"
+              @click="nextStep(step)"
               color="primary"
               label="Continue"
             />
@@ -328,14 +334,13 @@
             <q-card-section>
               <q-card-section class="q-gutter-xs q-pr-lg">
                 <q-select
-                  dense
+                  fit
                   rounded
                   outlined
                   v-model="Cursos.FormacaoExtra"
                   :options="optionsExtra"
                   label="Escolha a opção"
                   emit-value
-                  class="q-mt-sm q-mb-xs"
                 >
                   <template v-slot:option="scope">
                     <q-item
@@ -349,29 +354,27 @@
                     </q-item>
                   </template>
                 </q-select>
-                <input
-                  v-if="Cursos.FormacaoExtra"
+                <q-input
                   v-model="Cursos.nomeDaEscolaTecnica"
                   :readonly="btnlerEscrever"
                   placeholder="Nome da Escola"
-                  dense
+                  fit
                   rounded
                   outlined
-                  class="text-h6  q-mt-sm q-mb-xs"
+                  class=" q-mt-sm q-mb-xs"
                 />
-                <input
-                  v-if="Cursos.nomeDaEscolaTecnica.length > 7"
+                <q-input
                   v-model="Cursos.nomeDoCurso"
                   :readonly="btnlerEscrever"
                   placeholder="Informe o nome do Curso"
-                  dense
+                  fit
                   rounded
                   outlined
-                  class="text-h6  q-mt-sm q-mb-xs"
+                  class=" q-mt-sm q-mb-xs"
                 />
                 <q-btn
                   color="primary"
-                  @click="addCampo(null, Cursos)"
+                  @click="addCampoCurso"
                 >
                   <q-icon
                     left
@@ -384,22 +387,22 @@
                 <q-list
                   bordered
                   separator
-                  v-if="Form.Experiencia.length > 0"
+                  v-if="FormTwo.Cursos.length > 0"
                 >
                   <q-item
-                    v-for="(info, index) in Form.Cursos"
+                    v-for="(infos, index) in FormTwo.Cursos"
                     :key="index"
                   >
                     <q-item-section top>
                       <q-item-label lines="1">
                         <span class="text-weight-medium">Nome da Escola:</span>
-                        <span class="text-grey-8"> - {{ info.nomeDaEscolaTecnica}}</span>
+                        <span class="text-grey-8"> - {{ infos.nomeDaEscolaTecnica}}</span>
                       </q-item-label>
                       <q-item-label
                         caption
                         lines="1"
                       >
-                        Grau do Curso: {{ info.FormacaoExtra}}
+                        Grau do Curso: {{ infos.FormacaoExtra}}
                       </q-item-label>
                     </q-item-section>
 
@@ -411,10 +414,10 @@
                         <q-btn
                           size="12px"
                           flat
-                          dense
+                          fit
                           round
                           icon="delete"
-                          @click="retirarCampo(info)"
+                          @click="retirarCampoCurso(infos)"
                         />
                       </div>
                     </q-item-section>
@@ -445,6 +448,8 @@
 
 <script>
 import dayjs from 'dayjs'
+import { required, minLength, email } from 'vuelidate/lib/validators'
+import { isPhone, isCPF } from 'brazilian-values'
 export default {
   name: 'PageIndex',
   data () {
@@ -517,15 +522,18 @@ export default {
       reset: '',
       step: 1,
       btnlerEscrever: true,
-      Form: {
+      Form: {},
+      FormOne: {
         name: '',
         dtNasc: '',
         tel: '',
         endereco: '',
         RG: '',
-        CPF: '',
+        CPF: null,
         email: '',
-        age: '',
+        age: ''
+      },
+      FormTwo: {
         FormacaoAcademica: '',
         nomeDaEscola: '',
         Experiencia: [],
@@ -533,54 +541,135 @@ export default {
       }
     }
   },
+  // TODO: Trocar para cada STEP um form diferente isso facilitara as validações
+  validations: {
+    FormOne: {
+      name: {
+        required,
+        minLength: minLength(4)
+      },
+      dtNasc: {
+        required
+      },
+      tel: {
+        required,
+        isPhone
+      },
+      RG: {
+        required
+      },
+      CPF: {
+        required,
+        isCPF
+      },
+      email: {
+        required,
+        email
+      },
+      age: {
+        required
+      },
+      endereco: {
+        required
+      },
+      FormacaoAcademica: {
+        required,
+        minLength: minLength(7)
+      },
+      nomeDaEscola: {
+        required,
+        minLength: minLength(7)
+      }
+    }
+  },
   methods: {
+    nextStep (step) {
+      switch (step) {
+        case 1:
+          this.$v.FormOne.name.$touch()
+          this.$v.FormOne.dtNasc.$touch()
+          this.$v.FormOne.tel.$touch()
+          this.$v.FormOne.endereco.$touch()
+          this.$v.FormOne.RG.$touch()
+          this.$v.FormOne.CPF.$touch()
+          this.$v.FormOne.email.$touch()
+          this.$v.FormOne.age.$touch()
+          break
+
+        default:
+          break
+      }
+      this.$v.FormOne.$error ? this.step-- : this.step++
+    },
     gerar () {
       this.btnGerar = !this.btnGerar
     },
     zerar () {
       this.btnlerEscrever = !this.btnlerEscrever
-      this.Form = {}
+      this.FormOne = {}
+      this.FormTwo = {}
     },
     criarPDF () {
-      alert(JSON.stringify(this.Form.Experiencia))
+      this.Form.b64Foto = this.$refs.b64Foto ? this.$refs.b64Foto.generateDataUrl() : ''
+      this.Form.push(this.FormOne)
+      this.Form.push(this.FormTwo)
+      alert(JSON.stringify(this.Form))
     },
-    addCampo (Exp, Curso) {
-      if (Exp && Exp !== this.Experiencia) {
-        console.log(Exp)
-        const dataFim = dayjs(Exp.dateFim.substring(0, 10))
-        const tempoYEAR = dataFim.diff(Exp.dateIni.substring(0, 10), 'year')
-        const tempoMONTH = dataFim.diff(Exp.dateIni.substring(0, 10), 'month')
+    async addCampoExperiencia () {
+      if (!this.Experiencia.dateFim) {
+        return this.$q.notify({
+          message: 'OPS!!!!',
+          caption: 'Falta informação!',
+          color: 'negative'
+        })
+      }
+      const dataFim = dayjs(this.Experiencia.dateFim.substring(0, 10))
+      const tempoYEAR = dataFim.diff(this.Experiencia.dateIni.substring(0, 10), 'year')
+      const tempoMONTH = dataFim.diff(this.Experiencia.dateIni.substring(0, 10), 'month')
 
-        if (tempoYEAR > 0) {
-          Exp.tempo = `${tempoYEAR} Ano(s)`
-        } else {
-          Exp.tempo = tempoMONTH > 1 ? `${tempoMONTH} Meses` : `${tempoMONTH} Mês`
-        }
-        this.Form.Experiencia.push(Exp)
-        this.Experiencia = {
-          nomeDaEmpresa: '',
-          cargo: '',
-          dateIni: null,
-          dateFim: null,
-          tempo: ''
-        }
+      if (tempoYEAR > 0) {
+        this.Experiencia.tempo = `${tempoYEAR} Ano(s)`
       } else {
-        if (Curso !== this.Cursos) {
-          this.Form.Cursos.push(Curso)
-          this.Cursos = {
-            nomeDaEscolaTecnica: '',
-            FormacaoExtra: ''
-          }
-        }
+        this.Experiencia.tempo = tempoMONTH > 1 ? `${tempoMONTH} Meses` : `${tempoMONTH} Mês`
+      }
+      await this.Form.Experiencia.push(this.Experiencia)
+      this.Experiencia = {
+        nomeDaEmpresa: '',
+        cargo: '',
+        dateIni: null,
+        dateFim: null,
+        tempo: ''
       }
       return this.$q.notify({
-        message: 'OPS!!!',
-        caption: 'Falta Informações',
-        color: 'negative'
+        message: 'Cadastro',
+        caption: 'Cadastrado com sucesso!',
+        color: 'positive'
       })
     },
-    retirarCampo (info) {
-      console.log(info)
+    addCampoCurso () {
+      if (!this.Cursos.nomeDaEscolaTecnica.length > 0) {
+        return this.$q.notify({
+          message: 'OPS!!!!',
+          caption: 'Falta informação!',
+          color: 'negative'
+        })
+      }
+      this.Form.Cursos.push(this.Cursos)
+      this.Cursos = {
+        nomeDaEscolaTecnica: '',
+        FormacaoExtra: ''
+      }
+      return this.$q.notify({
+        message: 'Cadastro',
+        caption: 'Cadastrado com sucesso!',
+        color: 'positive'
+      })
+    },
+    retirarCampoExperiencia (info) {
+      this.Form.Experiencia = this.Form.Experiencia.filter(R => R.nomeDaEmpresa !== info.nomeDaEmpresa)
+    },
+    retirarCampoCurso (info) {
+      this.Form.Cursos = this.Form.Cursos.filter(R => R.nomeDaEscolaTecnica !== info.nomeDaEscolaTecnica)
     }
   }
 }
